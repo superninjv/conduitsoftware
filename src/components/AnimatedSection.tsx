@@ -2,16 +2,15 @@
 
 import { useEffect, useRef, useState, ReactNode } from "react";
 
-interface Props {
+interface SectionProps {
   children: ReactNode;
   className?: string;
   delay?: number;
-  once?: boolean;
 }
 
-export function AnimatedSection({ children, className = "", delay = 0, once = true }: Props) {
+export function AnimatedSection({ children, className = "", delay = 0 }: SectionProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -20,26 +19,24 @@ export function AnimatedSection({ children, className = "", delay = 0, once = tr
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
-          if (once) observer.unobserve(el);
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.08, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [once]);
+  }, []);
 
   return (
     <div
       ref={ref}
-      className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(24px)",
-        transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-      }}
+      className={`transition-all duration-600 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms`, transitionDuration: "600ms" }}
     >
       {children}
     </div>

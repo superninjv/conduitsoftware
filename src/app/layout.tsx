@@ -6,7 +6,10 @@ import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: siteConfig.name, template: `%s | ${siteConfig.name}` },
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   openGraph: {
@@ -18,10 +21,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className="min-h-screen font-body antialiased" style={{ background: "var(--surface-0)", color: "var(--text-primary)" }}>
+      <body className="min-h-screen bg-[var(--surface-primary)] text-[var(--text-primary)] font-body antialiased">
         <ThemeProvider>
           <div className="relative flex min-h-screen flex-col">
             <Navbar />

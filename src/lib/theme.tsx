@@ -38,7 +38,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
-  // Prevent flash by rendering nothing until mounted
   if (!mounted) {
     return <div style={{ visibility: "hidden" }}>{children}</div>;
   }

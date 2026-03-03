@@ -1,232 +1,252 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { projects } from "@/config/projects";
 import { siteConfig } from "@/config/site";
 import { AnimatedSection } from "@/components/AnimatedSection";
-import { ProjectCard } from "@/components/ProjectCard";
 import { ConduitLogo } from "@/components/ConduitLogo";
 
-const featured = projects.filter((p) => p.featured);
-
-const marqueeItems = [
-  "Fortnite", "Marvel Rivals", "Overwatch 2", "CS2", "Minecraft", "Terraria",
-  "Analytics", "Mods", "Developer Tools", "Open Source", "APIs",
-  "Fortnite", "Marvel Rivals", "Overwatch 2", "CS2", "Minecraft", "Terraria",
-  "Analytics", "Mods", "Developer Tools", "Open Source", "APIs",
+/* ── Rotating badge items ─────────────────────────────────── */
+const badgeItems = [
+  { label: "Paragon Analytics Engine", status: "Live", href: "/#analytics" },
+  { label: "Conduit Developer Tools", status: "In Development", href: "/#tools" },
+  { label: "Bug Report Portal", status: "Live", href: "/bugs" },
+  { label: "REST API", status: "Live", href: "/docs" },
 ];
 
+/* ── Stats ─────────────────────────────────────────────────── */
+const stats = [
+  { value: "12+", label: "Data Sources Tracked" },
+  { value: "500+", label: "Active Users" },
+  { value: "2.4K", label: "Downloads" },
+];
+
+/* ── Rotating Badge Component ──────────────────────────────── */
+function RotatingBadge() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((i) => (i + 1) % badgeItems.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, []);
+
+  const item = badgeItems[index];
+
+  return (
+    <Link
+      href={item.href}
+      className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--surface-card)] hover:border-[var(--border-hover)] transition-colors duration-200"
+    >
+      <span className="flex items-center gap-1.5">
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${
+            item.status === "Live" ? "bg-emerald-500" : "bg-blue-500"
+          }`}
+        />
+        <span className="text-[11px] font-medium text-[var(--text-tertiary)]">
+          {item.status}
+        </span>
+      </span>
+      <span className="w-px h-3 bg-[var(--border-color)]" />
+      <span
+        key={index}
+        className="text-xs font-medium text-[var(--text-secondary)]"
+        style={{
+          animation: "fadeSlideIn 3.2s ease-in-out",
+        }}
+      >
+        {item.label}
+      </span>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="text-[var(--text-tertiary)]"
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </Link>
+  );
+}
+
+/* ── Main Page ─────────────────────────────────────────────── */
 export default function HomePage() {
   return (
     <>
-      {/* ━━ Hero ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
-        {/* Gradient mesh background */}
-        <div className="absolute inset-0" style={{ background: "var(--gradient-mesh)" }} />
-        <div className="absolute inset-0 grid-bg" />
+      {/* ── Hero ────────────────────────────────────────────── */}
+      <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{ background: "var(--gradient-hero)" }}
+        />
+        <div className="absolute inset-0 bg-grid opacity-40" />
 
-        {/* Floating orbs */}
-        <div className="absolute w-[500px] h-[500px] rounded-full -top-48 -right-48 animate-glow-pulse" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%)", filter: "blur(60px)" }} />
-        <div className="absolute w-[400px] h-[400px] rounded-full -bottom-32 -left-32 animate-glow-pulse" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1), transparent 70%)", filter: "blur(60px)", animationDelay: "2s" }} />
-
-        <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-32 pb-24">
-          <div className="max-w-[820px]">
-            {/* Status pill */}
-            <AnimatedSection>
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 mb-10 rounded-full" style={{ background: "var(--surface-card)", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
-                <span className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
-                  Paragon Royale is live &mdash; track your Fortnite stats now
-                </span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ color: "var(--text-muted)" }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </AnimatedSection>
-
-            {/* Headline */}
-            <AnimatedSection delay={80}>
-              <h1 className="heading-display text-[clamp(2.8rem,6.5vw,5.2rem)] mb-6" style={{ color: "var(--text-primary)" }}>
-                The infrastructure between{" "}
-                <span className="gradient-text">players</span> and{" "}
-                <span className="gradient-text">data</span>
-              </h1>
-            </AnimatedSection>
-
-            {/* Subhead */}
-            <AnimatedSection delay={160}>
-              <p className="text-lg sm:text-xl leading-relaxed max-w-[600px] mb-10" style={{ color: "var(--text-secondary)" }}>
-                Game analytics platforms, mods, developer tools, and open&#8209;source APIs.
-                Built for the games you play.
-              </p>
-            </AnimatedSection>
-
-            {/* CTAs */}
-            <AnimatedSection delay={240}>
-              <div className="flex flex-wrap items-center gap-4">
-                <Link href="/projects" className="btn-primary gap-2">
-                  Explore Projects
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </Link>
-                <Link href="/docs" className="btn-secondary gap-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                  API Docs
-                </Link>
-              </div>
-            </AnimatedSection>
-          </div>
-
-          {/* Hero visual — abstract dashboard mockup */}
-          <AnimatedSection delay={350} className="mt-16 lg:mt-20">
-            <div className="card p-1.5" style={{ boxShadow: "var(--shadow-lg), var(--shadow-glow)" }}>
-              <div className="rounded-[14px] overflow-hidden" style={{ background: "var(--surface-1)" }}>
-                {/* Tab bar */}
-                <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: "1px solid var(--border-color)" }}>
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(239,68,68,0.7)" }} />
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(245,158,11,0.7)" }} />
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(34,197,94,0.7)" }} />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className="px-4 py-1 rounded-md text-[11px] font-mono" style={{ background: "var(--surface-2)", color: "var(--text-muted)" }}>
-                      conduitsoftware.org/dashboard
-                    </div>
-                  </div>
-                </div>
-
-                {/* Dashboard content */}
-                <div className="p-6 grid grid-cols-3 gap-4" style={{ minHeight: "260px" }}>
-                  {/* Stat cards */}
-                  {[
-                    { label: "Matches Tracked", value: "1.2M", change: "+12.4%", color: "#10b981" },
-                    { label: "Active Users", value: "8,432", change: "+24.1%", color: "#8b5cf6" },
-                    { label: "Mod Downloads", value: "340K", change: "+8.7%", color: "#6366f1" },
-                  ].map((stat, i) => (
-                    <div key={stat.label} className="rounded-xl p-4" style={{ background: "var(--surface-card)", border: "1px solid var(--border-color)" }}>
-                      <div className="text-[11px] font-medium mb-2" style={{ color: "var(--text-muted)" }}>{stat.label}</div>
-                      <div className="flex items-end justify-between">
-                        <span className="font-display font-bold text-2xl" style={{ color: "var(--text-primary)" }}>{stat.value}</span>
-                        <span className="text-xs font-semibold" style={{ color: stat.color }}>{stat.change}</span>
-                      </div>
-                      {/* Mini sparkline */}
-                      <svg className="w-full h-8 mt-2" viewBox="0 0 100 30" preserveAspectRatio="none">
-                        <path
-                          d={i === 0 ? "M0,25 Q15,20 30,18 T60,12 T100,5" : i === 1 ? "M0,22 Q20,25 40,15 T70,8 T100,10" : "M0,20 Q25,22 50,15 T80,10 T100,8"}
-                          fill="none" stroke={stat.color} strokeWidth="1.5" opacity="0.6"
-                        />
-                        <path
-                          d={`${i === 0 ? "M0,25 Q15,20 30,18 T60,12 T100,5" : i === 1 ? "M0,22 Q20,25 40,15 T70,8 T100,10" : "M0,20 Q25,22 50,15 T80,10 T100,8"} L100,30 L0,30 Z`}
-                          fill={stat.color} opacity="0.08"
-                        />
-                      </svg>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ━━ Marquee ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="overflow-hidden py-6" style={{ borderTop: "1px solid var(--border-color)", borderBottom: "1px solid var(--border-color)", background: "var(--surface-1)" }}>
-        <div className="animate-marquee flex items-center whitespace-nowrap">
-          {marqueeItems.map((item, i) => (
-            <span key={i} className="flex items-center">
-              <span className="mx-6 text-sm font-display font-semibold" style={{ color: "var(--text-muted)" }}>
-                {item}
-              </span>
-              <span className="w-1 h-1 rounded-full" style={{ background: "var(--text-muted)", opacity: 0.4 }} />
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* ━━ Featured Projects — Bento Grid ━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="py-28">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
           <AnimatedSection>
-            <div className="max-w-[560px] mb-16">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-4 gradient-text">Products</p>
-              <h2 className="heading-section text-[clamp(1.8rem,4vw,2.8rem)] mb-4" style={{ color: "var(--text-primary)" }}>
-                What we&apos;re building
-              </h2>
-              <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                Game analytics, modding tools, and developer infrastructure &mdash; every project solves a real problem for players and builders.
-              </p>
+            <div className="mb-8">
+              <RotatingBadge />
             </div>
           </AnimatedSection>
 
-          <div className="bento-grid">
-            {featured.map((project, i) => (
-              <AnimatedSection key={project.id} delay={i * 100} className={i === 0 ? "bento-wide" : i === 1 ? "bento-narrow" : "bento-half"}>
-                <ProjectCard project={project} size={i === 0 ? "large" : "default"} />
+          <AnimatedSection delay={80}>
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.1] mb-5">
+              Connecting humans to{" "}
+              <span className="gradient-text">meaningful data</span>
+            </h1>
+          </AnimatedSection>
+
+          <AnimatedSection delay={160}>
+            <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
+              Analytics engines, developer tools, game mods, and open-source
+              APIs. We build the software that turns raw data into real insight.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={240}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/#analytics" className="btn-primary px-6 py-2.5">
+                Explore Products
+                <svg
+                  className="ml-2 w-3.5 h-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </Link>
+              <Link href="/docs" className="btn-secondary px-6 py-2.5">
+                API Docs
+              </Link>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ── Stats ───────────────────────────────────────────── */}
+      <section className="border-y border-[var(--border-color)] bg-[var(--surface-secondary)]">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-3 gap-8">
+            {stats.map((stat, i) => (
+              <AnimatedSection key={stat.label} delay={i * 80}>
+                <div className="text-center">
+                  <div className="font-display font-bold text-2xl sm:text-3xl text-[var(--text-primary)] mb-0.5">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs sm:text-sm text-[var(--text-tertiary)]">
+                    {stat.label}
+                  </div>
+                </div>
               </AnimatedSection>
             ))}
           </div>
-
-          <AnimatedSection delay={400} className="mt-12 text-center">
-            <Link href="/projects" className="accent-link inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200">
-              View all projects
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </Link>
-          </AnimatedSection>
         </div>
       </section>
 
-      {/* ━━ Infrastructure Section ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="py-28" style={{ background: "var(--surface-1)" }}>
-        <div className="max-w-[1200px] mx-auto px-6">
+      {/* ── Paragon Analytics Engine ────────────────────────── */}
+      <section id="analytics" className="py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto px-6">
           <AnimatedSection>
-            <div className="max-w-[560px] mb-16">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-4 gradient-text">Developers</p>
-              <h2 className="heading-section text-[clamp(1.8rem,4vw,2.8rem)] mb-4" style={{ color: "var(--text-primary)" }}>
-                Open source at the core
-              </h2>
-              <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                Our APIs are public, our tools are open. Browse source code, contribute, or build your own integrations on top of Conduit.
-              </p>
-            </div>
+            <span className="section-label mb-4 block">Analytics</span>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-4 text-[var(--text-primary)]">
+              Paragon Analytics Engine
+            </h2>
+            <p className="text-base text-[var(--text-secondary)] max-w-2xl mb-12 leading-relaxed">
+              Real-time performance tracking and competitive insights across
+              multiple game titles. Each Paragon app is purpose-built for its
+              game, surfacing the stats that actually matter.
+            </p>
           </AnimatedSection>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
-                title: "REST API",
-                desc: "Public endpoints for project metadata, game analytics, and mod information. No auth required for public data.",
-                icon: (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                ),
-                code: "GET /api/v1/projects",
+                name: "Paragon Royale",
+                game: "Fortnite",
+                status: "Live",
+                statusColor: "bg-emerald-500 text-emerald-500",
+                description:
+                  "Match analytics, performance trends, and competitive insights.",
+                href: "https://paragonroyale.com",
+                external: true,
               },
               {
-                title: "Bug Reports",
-                desc: "Structured bug reporting that goes straight to our inbox. Track issues across all Conduit projects from one place.",
-                icon: (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                ),
-                code: "POST /api/v1/bugs",
+                name: "Paragon Rivals",
+                game: "Marvel Rivals",
+                status: "In Development",
+                statusColor: "bg-blue-500 text-blue-500",
+                description:
+                  "Hero statistics, match breakdowns, and meta analysis.",
               },
               {
-                title: "Extensible",
-                desc: "Built on Next.js with a modular architecture. Adding a new project, endpoint, or page takes minutes, not days.",
-                icon: (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                ),
-                code: "config/projects.ts",
+                name: "Paragon Overwatch",
+                game: "Overwatch 2",
+                status: "Planned",
+                statusColor: "bg-zinc-400 text-zinc-400",
+                description:
+                  "Hero performance tracking, SR trends, and team composition analysis.",
               },
-            ].map((item, i) => (
-              <AnimatedSection key={item.title} delay={i * 100}>
-                <div className="card p-6 h-full">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: "rgba(124,58,237,0.08)", color: "rgb(124,58,237)" }}>
-                    {item.icon}
+              {
+                name: "Paragon Strike",
+                game: "CS2",
+                status: "Planned",
+                statusColor: "bg-zinc-400 text-zinc-400",
+                description:
+                  "Round-by-round breakdowns, economy tracking, and aim statistics.",
+              },
+            ].map((app, i) => (
+              <AnimatedSection key={app.name} delay={i * 80}>
+                <div className="card p-5 h-full flex flex-col">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-[var(--surface-tertiary)] text-[var(--text-tertiary)]">
+                      {app.game}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${app.statusColor.split(" ")[0]}`}
+                      />
+                      <span
+                        className={`text-[11px] font-medium ${app.statusColor.split(" ")[1]}`}
+                      >
+                        {app.status}
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="font-display font-semibold text-base mb-2" style={{ color: "var(--text-primary)" }}>{item.title}</h3>
-                  <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-tertiary)" }}>{item.desc}</p>
-                  <code className="text-xs font-mono px-2.5 py-1 rounded-md" style={{ background: "var(--surface-2)", color: "var(--text-muted)" }}>
-                    {item.code}
-                  </code>
+                  <h3 className="font-display font-bold text-sm text-[var(--text-primary)] mb-1.5">
+                    {app.name}
+                  </h3>
+                  <p className="text-sm text-[var(--text-tertiary)] leading-relaxed flex-1">
+                    {app.description}
+                  </p>
+                  {app.external && app.href && (
+                    <a
+                      href={app.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 pt-3 border-t border-[var(--border-color)] text-xs font-medium text-conduit-400 hover:text-conduit-300 transition-colors inline-flex items-center gap-1"
+                    >
+                      Visit site
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </a>
+                  )}
                 </div>
               </AnimatedSection>
             ))}
@@ -234,32 +254,236 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ━━ CTA ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="py-28">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <AnimatedSection>
-            <div className="card relative p-12 sm:p-20 text-center overflow-hidden">
-              {/* Glow */}
-              <div className="absolute w-[500px] h-[500px] rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-glow-pulse" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.1), transparent 70%)", filter: "blur(60px)" }} />
+      {/* ── Developer Tools ──────────────────────────────────── */}
+      <section
+        id="tools"
+        className="py-20 sm:py-28 bg-[var(--surface-secondary)]"
+      >
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <AnimatedSection>
+              <span className="section-label mb-4 block">Developer Tools</span>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-4 text-[var(--text-primary)]">
+                Conduit DevTools
+              </h2>
+              <p className="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">
+                A growing suite of developer tools built for internal use and
+                shared with the community. API testing, data transformation,
+                and workflow automation.
+              </p>
+              <div className="space-y-3">
+                {[
+                  {
+                    title: "API Testing",
+                    desc: "Automated endpoint validation and response monitoring",
+                  },
+                  {
+                    title: "Data Pipelines",
+                    desc: "Transform and route data between services",
+                  },
+                  {
+                    title: "Workflow Automation",
+                    desc: "Scriptable tasks and scheduled operations",
+                  },
+                ].map((feature) => (
+                  <div key={feature.title} className="flex items-start gap-3">
+                    <div className="mt-1 w-5 h-5 rounded-md bg-[var(--accent-muted)] flex items-center justify-center shrink-0">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--accent)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-[var(--text-primary)]">
+                        {feature.title}
+                      </div>
+                      <div className="text-sm text-[var(--text-tertiary)]">
+                        {feature.desc}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 mt-8">
+                <Link href="/docs" className="btn-primary px-5 py-2.5">
+                  API Documentation
+                </Link>
+                <a
+                  href={siteConfig.socials.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary px-5 py-2.5"
+                >
+                  GitHub
+                </a>
+              </div>
+            </AnimatedSection>
 
+            <AnimatedSection delay={120}>
+              <div className="card-elevated p-6 font-mono text-sm overflow-hidden">
+                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[var(--border-color)]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/60" />
+                  <span className="ml-2 text-[11px] text-[var(--text-tertiary)] font-sans">
+                    terminal
+                  </span>
+                </div>
+                <div className="space-y-1 text-xs leading-relaxed">
+                  <div>
+                    <span className="text-[var(--text-tertiary)]">$</span>{" "}
+                    <span className="text-conduit-300">curl</span>{" "}
+                    <span className="text-[var(--text-secondary)]">
+                      conduitsoftware.org/api/v1/projects
+                    </span>
+                  </div>
+                  <div className="text-[var(--text-tertiary)] mt-2">
+                    {"{"} <span className="text-emerald-400">&quot;projects&quot;</span>: [
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-4">
+                    {"{"} <span className="text-emerald-400">&quot;id&quot;</span>:{" "}
+                    <span className="text-amber-400">&quot;paragon-royale&quot;</span>,
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-6">
+                    <span className="text-emerald-400">&quot;status&quot;</span>:{" "}
+                    <span className="text-amber-400">&quot;live&quot;</span>,
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-6">
+                    <span className="text-emerald-400">&quot;category&quot;</span>:{" "}
+                    <span className="text-amber-400">&quot;analytics&quot;</span>
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-4">
+                    {"}"}, ...
+                  </div>
+                  <div className="text-[var(--text-tertiary)]">
+                    ], <span className="text-emerald-400">&quot;total&quot;</span>:{" "}
+                    <span className="text-amber-400">7</span> {"}"}
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Open Source CTA ───────────────────────────────────── */}
+      <section id="open-source" className="py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto px-6">
+          <AnimatedSection>
+            <div className="card-elevated p-10 sm:p-14 text-center relative overflow-hidden">
+              <div className="glow-orb w-[500px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
               <div className="relative z-10">
-                <ConduitLogo className="w-12 h-12 mx-auto mb-6" />
-                <h2 className="heading-section text-[clamp(1.6rem,3.5vw,2.4rem)] mb-4" style={{ color: "var(--text-primary)" }}>
-                  Start building with Conduit
+                <div className="inline-flex p-2.5 rounded-xl bg-[var(--accent-muted)] mb-5">
+                  <ConduitLogo className="w-8 h-8" />
+                </div>
+                <h2 className="font-display font-bold text-2xl sm:text-3xl tracking-tight mb-3 text-[var(--text-primary)]">
+                  Open source at the core
                 </h2>
-                <p className="text-base max-w-md mx-auto mb-8 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                  Explore the API, report a bug, or get in touch. We&apos;re building this in the open and we want to hear from you.
+                <p className="text-base text-[var(--text-secondary)] max-w-lg mx-auto mb-8 leading-relaxed">
+                  Our APIs and tools are built in the open. Browse the source,
+                  contribute, or build your own integrations.
                 </p>
-                <div className="flex flex-wrap items-center justify-center gap-4">
-                  <Link href="/docs" className="btn-primary gap-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Link href="/docs" className="btn-primary px-6 py-2.5">
                     Read the Docs
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </Link>
-                  <Link href="/contact" className="btn-secondary">Get in Touch</Link>
+                  <a
+                    href={siteConfig.socials.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary px-6 py-2.5"
+                  >
+                    View on GitHub
+                  </a>
                 </div>
               </div>
             </div>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ── Game Mods ────────────────────────────────────────── */}
+      <section
+        id="mods"
+        className="py-20 sm:py-28 bg-[var(--surface-secondary)]"
+      >
+        <div className="max-w-6xl mx-auto px-6">
+          <AnimatedSection>
+            <span className="section-label mb-4 block">Game Mods</span>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-4 text-[var(--text-primary)]">
+              Mods &amp; modding tools
+            </h2>
+            <p className="text-base text-[var(--text-secondary)] max-w-2xl mb-12 leading-relaxed">
+              Minecraft mods published on CurseForge and Modrinth, plus
+              companion tools for other titles.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <AnimatedSection>
+              <div className="card p-6 h-full">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-display font-bold text-base text-[var(--text-primary)]">
+                    Minecraft Mods
+                  </h3>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="text-[11px] font-medium text-emerald-500">
+                      Live
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Quality-of-life improvements and new gameplay mechanics for
+                  Minecraft. Available on both CurseForge and Modrinth.
+                </p>
+                <div className="flex gap-2">
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    CurseForge
+                  </span>
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    Modrinth
+                  </span>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={80}>
+              <div className="card p-6 h-full">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-display font-bold text-base text-[var(--text-primary)]">
+                    Terraria Tools
+                  </h3>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                    <span className="text-[11px] font-medium text-zinc-400">
+                      Planned
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Companion utilities for Terraria including world analysis
+                  and inventory management tools.
+                </p>
+                <div className="flex gap-2">
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    Terraria
+                  </span>
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    Utilities
+                  </span>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
         </div>
       </section>
     </>
