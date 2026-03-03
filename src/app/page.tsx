@@ -1,499 +1,267 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { projects } from "@/config/projects";
+import { siteConfig } from "@/config/site";
+import { AnimatedSection } from "@/components/AnimatedSection";
+import { ProjectCard } from "@/components/ProjectCard";
+import { ConduitLogo } from "@/components/ConduitLogo";
 
-function AnimatedSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+const featured = projects.filter((p) => p.featured);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            el.style.opacity = "1";
-            el.style.transform = "translateY(0)";
-          }, delay);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
+const marqueeItems = [
+  "Fortnite", "Marvel Rivals", "Overwatch 2", "CS2", "Minecraft", "Terraria",
+  "Analytics", "Mods", "Developer Tools", "Open Source", "APIs",
+  "Fortnite", "Marvel Rivals", "Overwatch 2", "CS2", "Minecraft", "Terraria",
+  "Analytics", "Mods", "Developer Tools", "Open Source", "APIs",
+];
 
+export default function HomePage() {
   return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: 0,
-        transform: "translateY(30px)",
-        transition: "opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+    <>
+      {/* ━━ Hero ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
+        {/* Gradient mesh background */}
+        <div className="absolute inset-0" style={{ background: "var(--gradient-mesh)" }} />
+        <div className="absolute inset-0 grid-bg" />
 
-/* ---------- tiny SVG illustrations (pure ASCII, no emoji) ---------- */
+        {/* Floating orbs */}
+        <div className="absolute w-[500px] h-[500px] rounded-full -top-48 -right-48 animate-glow-pulse" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%)", filter: "blur(60px)" }} />
+        <div className="absolute w-[400px] h-[400px] rounded-full -bottom-32 -left-32 animate-glow-pulse" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1), transparent 70%)", filter: "blur(60px)", animationDelay: "2s" }} />
 
-function AnalyticsGraphic() {
-  return (
-    <svg viewBox="0 0 280 120" fill="none" className="w-full h-auto" aria-hidden="true">
-      <rect x="0" y="0" width="280" height="120" rx="8" fill="rgba(99,102,241,0.06)" />
-      {/* bar chart */}
-      <rect x="30" y="70" width="18" height="30" rx="3" fill="rgba(99,102,241,0.35)" />
-      <rect x="58" y="50" width="18" height="50" rx="3" fill="rgba(99,102,241,0.5)" />
-      <rect x="86" y="60" width="18" height="40" rx="3" fill="rgba(99,102,241,0.4)" />
-      <rect x="114" y="35" width="18" height="65" rx="3" fill="rgba(99,102,241,0.6)" />
-      <rect x="142" y="45" width="18" height="55" rx="3" fill="rgba(99,102,241,0.45)" />
-      <rect x="170" y="25" width="18" height="75" rx="3" fill="rgba(99,102,241,0.7)" />
-      {/* trend line */}
-      <polyline
-        points="39,68 67,48 95,58 123,33 151,43 179,23 220,18"
-        stroke="rgba(99,102,241,0.9)"
-        strokeWidth="2"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="220" cy="18" r="4" fill="#6366f1" />
-      {/* label */}
-      <text x="210" y="50" fill="rgba(99,102,241,0.5)" fontSize="10" fontFamily="monospace">+24%</text>
-    </svg>
-  );
-}
-
-function DevToolsGraphic() {
-  return (
-    <svg viewBox="0 0 280 120" fill="none" className="w-full h-auto" aria-hidden="true">
-      <rect x="0" y="0" width="280" height="120" rx="8" fill="rgba(16,185,129,0.06)" />
-      {/* terminal window */}
-      <rect x="20" y="15" width="240" height="90" rx="6" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" strokeWidth="1" />
-      {/* title bar dots */}
-      <circle cx="35" cy="28" r="3" fill="rgba(16,185,129,0.3)" />
-      <circle cx="46" cy="28" r="3" fill="rgba(16,185,129,0.2)" />
-      <circle cx="57" cy="28" r="3" fill="rgba(16,185,129,0.15)" />
-      {/* code lines */}
-      <rect x="32" y="42" width="80" height="6" rx="2" fill="rgba(16,185,129,0.25)" />
-      <rect x="32" y="54" width="120" height="6" rx="2" fill="rgba(16,185,129,0.18)" />
-      <rect x="44" y="66" width="95" height="6" rx="2" fill="rgba(16,185,129,0.22)" />
-      <rect x="44" y="78" width="60" height="6" rx="2" fill="rgba(16,185,129,0.15)" />
-      <rect x="32" y="90" width="40" height="6" rx="2" fill="rgba(16,185,129,0.25)" />
-      {/* cursor blink */}
-      <rect x="76" y="89" width="2" height="8" fill="rgba(16,185,129,0.7)" />
-    </svg>
-  );
-}
-
-function ModsGraphic() {
-  return (
-    <svg viewBox="0 0 280 120" fill="none" className="w-full h-auto" aria-hidden="true">
-      <rect x="0" y="0" width="280" height="120" rx="8" fill="rgba(245,158,11,0.06)" />
-      {/* block grid -- representing minecraft-style blocks */}
-      {[0, 1, 2, 3, 4].map((row) =>
-        [0, 1, 2, 3, 4, 5, 6].map((col) => {
-          const opacity = Math.abs(Math.sin(row * 3 + col * 2)) * 0.4 + 0.1;
-          return (
-            <rect
-              key={`${row}-${col}`}
-              x={40 + col * 30}
-              y={15 + row * 20}
-              width="24"
-              height="16"
-              rx="2"
-              fill={`rgba(245,158,11,${opacity.toFixed(2)})`}
-            />
-          );
-        })
-      )}
-    </svg>
-  );
-}
-
-export default function Home() {
-  return (
-    <div className="relative">
-      {/* ========== HERO ========== */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* mesh background */}
-        <div className="absolute inset-0 -z-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: [
-                "radial-gradient(ellipse 80% 60% at 20% 30%, rgba(99,102,241,0.08), transparent 60%)",
-                "radial-gradient(ellipse 60% 80% at 80% 70%, rgba(16,185,129,0.06), transparent 60%)",
-                "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(245,158,11,0.04), transparent 70%)",
-              ].join(", "),
-            }}
-          />
-          {/* grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: "linear-gradient(var(--text-primary) 1px, transparent 1px), linear-gradient(90deg, var(--text-primary) 1px, transparent 1px)",
-              backgroundSize: "64px 64px",
-            }}
-          />
-        </div>
-
-        <div className="max-w-[1200px] mx-auto px-6 py-32 text-center">
-          <AnimatedSection>
-            <p
-              className="text-sm font-medium tracking-widest uppercase mb-6"
-              style={{ color: "rgba(99,102,241,0.8)" }}
-            >
-              Software Infrastructure
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={100}>
-            <h1
-              className="font-bold leading-[1.05] tracking-tight mb-8"
-              style={{
-                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                color: "var(--text-primary)",
-                letterSpacing: "-0.03em",
-              }}
-            >
-              Tools, analytics, and mods
-              <br />
-              <span style={{ color: "rgba(99,102,241,0.7)" }}>built for developers</span>
-            </h1>
-          </AnimatedSection>
-
-          <AnimatedSection delay={200}>
-            <p
-              className="text-lg leading-relaxed max-w-2xl mx-auto mb-10"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              Conduit Software builds analytics engines, developer tools, and
-              game modifications. Open-source APIs, real-time data pipelines,
-              and community-driven projects.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={300}>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <Link
-                href="#analytics"
-                className="px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                style={{
-                  background: "rgba(99,102,241,0.9)",
-                  color: "#fff",
-                }}
-              >
-                Explore Products
-              </Link>
-              <Link
-                href="/docs"
-                className="px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                style={{
-                  background: "var(--card-bg)",
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--card-border)",
-                }}
-              >
-                API Docs
-              </Link>
-            </div>
-          </AnimatedSection>
-
-          {/* stat bar */}
-          <AnimatedSection delay={400}>
-            <div
-              className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto"
-            >
-              {[
-                { value: "3", label: "Product Lines" },
-                { value: "Open", label: "Source APIs" },
-                { value: "Active", label: "Mod Development" },
-                { value: "Growing", label: "Tool Ecosystem" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div
-                    className="text-2xl font-bold"
-                    style={{ color: "var(--text-primary)" }}
-                  >
-                    {stat.value}
-                  </div>
-                  <div
-                    className="text-xs mt-1 tracking-wide uppercase"
-                    style={{ color: "var(--text-tertiary)" }}
-                  >
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ========== PARAGON ANALYTICS ENGINE ========== */}
-      <section id="analytics" className="relative py-28">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-32 pb-24">
+          <div className="max-w-[820px]">
+            {/* Status pill */}
             <AnimatedSection>
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-4"
-                style={{ color: "rgba(99,102,241,0.8)" }}
-              >
-                Analytics
-              </p>
-              <h2
-                className="text-3xl sm:text-4xl font-bold tracking-tight mb-6"
-                style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-              >
-                Paragon Analytics Engine
-              </h2>
-              <p
-                className="text-base leading-relaxed mb-6"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                Real-time data pipelines and analytics platforms built for
-                competitive gaming. Each Paragon product targets a specific
-                title with deep stat tracking, match analysis, and performance
-                trends.
-              </p>
-              <div className="space-y-4">
-                <div
-                  className="p-4 rounded-lg"
-                  style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                      Paragon Royale
-                    </h3>
-                    <span
-                      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                      style={{ background: "rgba(16,185,129,0.1)", color: "rgba(16,185,129,0.9)" }}
-                    >
-                      Live
-                    </span>
-                  </div>
-                  <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
-                    Fortnite analytics -- match breakdowns, performance trends,
-                    and competitive insights.
-                  </p>
-                </div>
-                <div
-                  className="p-4 rounded-lg"
-                  style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                      Paragon Rivals
-                    </h3>
-                    <span
-                      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                      style={{ background: "rgba(245,158,11,0.1)", color: "rgba(245,158,11,0.9)" }}
-                    >
-                      In Development
-                    </span>
-                  </div>
-                  <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
-                    Marvel Rivals hero statistics, meta analysis, and match
-                    data.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-6">
-                <a
-                  href="https://paragonroyale.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-semibold transition-colors duration-200"
-                  style={{ color: "rgba(99,102,241,0.8)" }}
-                >
-                  Visit Paragon Royale &rarr;
-                </a>
-              </div>
-            </AnimatedSection>
-
-            <AnimatedSection delay={150}>
-              <AnalyticsGraphic />
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== DEVELOPER TOOLS ========== */}
-      <section id="devtools" className="relative py-28">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <AnimatedSection className="order-2 md:order-1">
-              <DevToolsGraphic />
-            </AnimatedSection>
-
-            <AnimatedSection delay={150} className="order-1 md:order-2">
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-4"
-                style={{ color: "rgba(16,185,129,0.8)" }}
-              >
-                Developer Tools
-              </p>
-              <h2
-                className="text-3xl sm:text-4xl font-bold tracking-tight mb-6"
-                style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-              >
-                Conduit DevTools
-              </h2>
-              <p
-                className="text-base leading-relaxed mb-6"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                A growing suite of open-source utilities for API testing, data
-                transformation, and workflow automation. Built for internal use
-                first, then shared with the community.
-              </p>
-              <div className="space-y-3">
-                {["API testing utilities", "Data transformation pipelines", "Workflow automation tools", "Open-source on GitHub"].map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <div
-                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                      style={{ background: "rgba(16,185,129,0.6)" }}
-                    />
-                    <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 flex gap-4">
-                <Link
-                  href="/docs"
-                  className="text-sm font-semibold transition-colors duration-200"
-                  style={{ color: "rgba(16,185,129,0.8)" }}
-                >
-                  API Documentation &rarr;
-                </Link>
-                <a
-                  href="https://github.com/conduit-software"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-semibold transition-colors duration-200"
-                  style={{ color: "var(--text-tertiary)" }}
-                >
-                  GitHub &rarr;
-                </a>
-              </div>
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== GAME MODS ========== */}
-      <section id="mods" className="relative py-28">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <AnimatedSection>
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-4"
-                style={{ color: "rgba(245,158,11,0.8)" }}
-              >
-                Game Mods
-              </p>
-              <h2
-                className="text-3xl sm:text-4xl font-bold tracking-tight mb-6"
-                style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-              >
-                Minecraft Mods
-              </h2>
-              <p
-                className="text-base leading-relaxed mb-6"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                A collection of Minecraft mods published on CurseForge and
-                Modrinth. From quality-of-life improvements to new gameplay
-                mechanics, all open source and community supported.
-              </p>
-              <div
-                className="p-4 rounded-lg mb-6"
-                style={{ background: "var(--card-bg)", border: "1px solid var(--card-border)" }}
-              >
-                <div className="flex items-center gap-4 text-sm" style={{ color: "var(--text-tertiary)" }}>
-                  <span>Available on:</span>
-                  <span className="font-semibold" style={{ color: "var(--text-secondary)" }}>CurseForge</span>
-                  <span style={{ color: "var(--card-border)" }}>|</span>
-                  <span className="font-semibold" style={{ color: "var(--text-secondary)" }}>Modrinth</span>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  className="text-sm font-semibold transition-colors duration-200 cursor-pointer"
-                  style={{ color: "rgba(245,158,11,0.8)" }}
-                >
-                  Browse Mods &rarr;
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 mb-10 rounded-full" style={{ background: "var(--surface-card)", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
+                <span className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+                  Paragon Royale is live &mdash; track your Fortnite stats now
+                </span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ color: "var(--text-muted)" }}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </div>
             </AnimatedSection>
 
-            <AnimatedSection delay={150}>
-              <ModsGraphic />
+            {/* Headline */}
+            <AnimatedSection delay={80}>
+              <h1 className="heading-display text-[clamp(2.8rem,6.5vw,5.2rem)] mb-6" style={{ color: "var(--text-primary)" }}>
+                The infrastructure between{" "}
+                <span className="gradient-text">players</span> and{" "}
+                <span className="gradient-text">data</span>
+              </h1>
+            </AnimatedSection>
+
+            {/* Subhead */}
+            <AnimatedSection delay={160}>
+              <p className="text-lg sm:text-xl leading-relaxed max-w-[600px] mb-10" style={{ color: "var(--text-secondary)" }}>
+                Game analytics platforms, mods, developer tools, and open&#8209;source APIs.
+                Built for the games you play.
+              </p>
+            </AnimatedSection>
+
+            {/* CTAs */}
+            <AnimatedSection delay={240}>
+              <div className="flex flex-wrap items-center gap-4">
+                <Link href="/projects" className="btn-primary gap-2">
+                  Explore Projects
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </Link>
+                <Link href="/docs" className="btn-secondary gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  API Docs
+                </Link>
+              </div>
             </AnimatedSection>
           </div>
-        </div>
-      </section>
 
-      {/* ========== OPEN SOURCE CTA ========== */}
-      <section className="relative py-28">
-        <div className="max-w-[800px] mx-auto px-6 text-center">
-          <AnimatedSection>
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-4"
-              style={{ color: "var(--text-tertiary)" }}
-            >
-              Open Source
-            </p>
-            <h2
-              className="text-3xl sm:text-4xl font-bold tracking-tight mb-6"
-              style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-            >
-              Built in the open
-            </h2>
-            <p
-              className="text-base leading-relaxed mb-8"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              Our APIs and tools are open source. Browse the code, contribute,
-              or build your own integrations on top of what we have built.
-            </p>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <Link
-                href="/docs"
-                className="px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                style={{
-                  background: "var(--card-bg)",
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--card-border)",
-                }}
-              >
-                Read the Docs
-              </Link>
-              <a
-                href="https://github.com/conduit-software"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-                style={{
-                  background: "var(--card-bg)",
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--card-border)",
-                }}
-              >
-                View on GitHub
-              </a>
+          {/* Hero visual — abstract dashboard mockup */}
+          <AnimatedSection delay={350} className="mt-16 lg:mt-20">
+            <div className="card p-1.5" style={{ boxShadow: "var(--shadow-lg), var(--shadow-glow)" }}>
+              <div className="rounded-[14px] overflow-hidden" style={{ background: "var(--surface-1)" }}>
+                {/* Tab bar */}
+                <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: "1px solid var(--border-color)" }}>
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(239,68,68,0.7)" }} />
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(245,158,11,0.7)" }} />
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(34,197,94,0.7)" }} />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <div className="px-4 py-1 rounded-md text-[11px] font-mono" style={{ background: "var(--surface-2)", color: "var(--text-muted)" }}>
+                      conduitsoftware.org/dashboard
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dashboard content */}
+                <div className="p-6 grid grid-cols-3 gap-4" style={{ minHeight: "260px" }}>
+                  {/* Stat cards */}
+                  {[
+                    { label: "Matches Tracked", value: "1.2M", change: "+12.4%", color: "#10b981" },
+                    { label: "Active Users", value: "8,432", change: "+24.1%", color: "#8b5cf6" },
+                    { label: "Mod Downloads", value: "340K", change: "+8.7%", color: "#6366f1" },
+                  ].map((stat, i) => (
+                    <div key={stat.label} className="rounded-xl p-4" style={{ background: "var(--surface-card)", border: "1px solid var(--border-color)" }}>
+                      <div className="text-[11px] font-medium mb-2" style={{ color: "var(--text-muted)" }}>{stat.label}</div>
+                      <div className="flex items-end justify-between">
+                        <span className="font-display font-bold text-2xl" style={{ color: "var(--text-primary)" }}>{stat.value}</span>
+                        <span className="text-xs font-semibold" style={{ color: stat.color }}>{stat.change}</span>
+                      </div>
+                      {/* Mini sparkline */}
+                      <svg className="w-full h-8 mt-2" viewBox="0 0 100 30" preserveAspectRatio="none">
+                        <path
+                          d={i === 0 ? "M0,25 Q15,20 30,18 T60,12 T100,5" : i === 1 ? "M0,22 Q20,25 40,15 T70,8 T100,10" : "M0,20 Q25,22 50,15 T80,10 T100,8"}
+                          fill="none" stroke={stat.color} strokeWidth="1.5" opacity="0.6"
+                        />
+                        <path
+                          d={`${i === 0 ? "M0,25 Q15,20 30,18 T60,12 T100,5" : i === 1 ? "M0,22 Q20,25 40,15 T70,8 T100,10" : "M0,20 Q25,22 50,15 T80,10 T100,8"} L100,30 L0,30 Z`}
+                          fill={stat.color} opacity="0.08"
+                        />
+                      </svg>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </AnimatedSection>
         </div>
       </section>
-    </div>
+
+      {/* ━━ Marquee ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="overflow-hidden py-6" style={{ borderTop: "1px solid var(--border-color)", borderBottom: "1px solid var(--border-color)", background: "var(--surface-1)" }}>
+        <div className="animate-marquee flex items-center whitespace-nowrap">
+          {marqueeItems.map((item, i) => (
+            <span key={i} className="flex items-center">
+              <span className="mx-6 text-sm font-display font-semibold" style={{ color: "var(--text-muted)" }}>
+                {item}
+              </span>
+              <span className="w-1 h-1 rounded-full" style={{ background: "var(--text-muted)", opacity: 0.4 }} />
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ━━ Featured Projects — Bento Grid ━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="py-28">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <AnimatedSection>
+            <div className="max-w-[560px] mb-16">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-4 gradient-text">Products</p>
+              <h2 className="heading-section text-[clamp(1.8rem,4vw,2.8rem)] mb-4" style={{ color: "var(--text-primary)" }}>
+                What we&apos;re building
+              </h2>
+              <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                Game analytics, modding tools, and developer infrastructure &mdash; every project solves a real problem for players and builders.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="bento-grid">
+            {featured.map((project, i) => (
+              <AnimatedSection key={project.id} delay={i * 100} className={i === 0 ? "bento-wide" : i === 1 ? "bento-narrow" : "bento-half"}>
+                <ProjectCard project={project} size={i === 0 ? "large" : "default"} />
+              </AnimatedSection>
+            ))}
+          </div>
+
+          <AnimatedSection delay={400} className="mt-12 text-center">
+            <Link href="/projects" className="accent-link inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200">
+              View all projects
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ━━ Infrastructure Section ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="py-28" style={{ background: "var(--surface-1)" }}>
+        <div className="max-w-[1200px] mx-auto px-6">
+          <AnimatedSection>
+            <div className="max-w-[560px] mb-16">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-4 gradient-text">Developers</p>
+              <h2 className="heading-section text-[clamp(1.8rem,4vw,2.8rem)] mb-4" style={{ color: "var(--text-primary)" }}>
+                Open source at the core
+              </h2>
+              <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                Our APIs are public, our tools are open. Browse source code, contribute, or build your own integrations on top of Conduit.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              {
+                title: "REST API",
+                desc: "Public endpoints for project metadata, game analytics, and mod information. No auth required for public data.",
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                ),
+                code: "GET /api/v1/projects",
+              },
+              {
+                title: "Bug Reports",
+                desc: "Structured bug reporting that goes straight to our inbox. Track issues across all Conduit projects from one place.",
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                ),
+                code: "POST /api/v1/bugs",
+              },
+              {
+                title: "Extensible",
+                desc: "Built on Next.js with a modular architecture. Adding a new project, endpoint, or page takes minutes, not days.",
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                ),
+                code: "config/projects.ts",
+              },
+            ].map((item, i) => (
+              <AnimatedSection key={item.title} delay={i * 100}>
+                <div className="card p-6 h-full">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: "rgba(124,58,237,0.08)", color: "rgb(124,58,237)" }}>
+                    {item.icon}
+                  </div>
+                  <h3 className="font-display font-semibold text-base mb-2" style={{ color: "var(--text-primary)" }}>{item.title}</h3>
+                  <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-tertiary)" }}>{item.desc}</p>
+                  <code className="text-xs font-mono px-2.5 py-1 rounded-md" style={{ background: "var(--surface-2)", color: "var(--text-muted)" }}>
+                    {item.code}
+                  </code>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ━━ CTA ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="py-28">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <AnimatedSection>
+            <div className="card relative p-12 sm:p-20 text-center overflow-hidden">
+              {/* Glow */}
+              <div className="absolute w-[500px] h-[500px] rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-glow-pulse" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.1), transparent 70%)", filter: "blur(60px)" }} />
+
+              <div className="relative z-10">
+                <ConduitLogo className="w-12 h-12 mx-auto mb-6" />
+                <h2 className="heading-section text-[clamp(1.6rem,3.5vw,2.4rem)] mb-4" style={{ color: "var(--text-primary)" }}>
+                  Start building with Conduit
+                </h2>
+                <p className="text-base max-w-md mx-auto mb-8 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                  Explore the API, report a bug, or get in touch. We&apos;re building this in the open and we want to hear from you.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <Link href="/docs" className="btn-primary gap-2">
+                    Read the Docs
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </Link>
+                  <Link href="/contact" className="btn-secondary">Get in Touch</Link>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+    </>
   );
 }

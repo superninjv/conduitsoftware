@@ -6,41 +6,38 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { ProjectCard } from "@/components/ProjectCard";
 
 export default function ProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState("all");
-
-  const filtered =
-    activeCategory === "all"
-      ? projects
-      : projects.filter((p) => p.category === activeCategory);
+  const [active, setActive] = useState("all");
+  const filtered = active === "all" ? projects : projects.filter((p) => p.category === active);
 
   return (
-    <div className="pt-28 pb-24">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
+    <div className="pt-32 pb-28">
+      <div className="max-w-[1200px] mx-auto px-6">
         <AnimatedSection>
-          <div className="max-w-2xl mb-10">
-            <h1 className="font-display font-bold text-4xl sm:text-5xl tracking-tight mb-4 text-[var(--text-primary)]">
-              Projects
-            </h1>
-            <p className="text-lg text-[var(--text-secondary)]">
-              Everything we&apos;re building, from game analytics to developer
-              tools. Click through to explore each project.
-            </p>
-          </div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-4 gradient-text">All Projects</p>
+          <h1 className="heading-display text-[clamp(2.2rem,5vw,3.5rem)] mb-4" style={{ color: "var(--text-primary)" }}>
+            What we&apos;re building
+          </h1>
+          <p className="text-lg max-w-[520px] leading-relaxed mb-12" style={{ color: "var(--text-secondary)" }}>
+            Game analytics, mods, developer tools, and more. Filter by category to find what you&apos;re looking for.
+          </p>
         </AnimatedSection>
 
-        {/* Category filters */}
-        <AnimatedSection delay={100}>
-          <div className="flex flex-wrap gap-2 mb-10">
+        <AnimatedSection delay={80}>
+          <div className="flex flex-wrap gap-2 mb-12">
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  activeCategory === cat.id
-                    ? "bg-conduit-500 text-white shadow-lg shadow-conduit-500/25"
-                    : "text-[var(--text-secondary)] bg-[var(--surface-card)] border border-[var(--border-color)] hover:border-conduit-500/30"
-                }`}
+                onClick={() => setActive(cat.id)}
+                className="px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-300"
+                style={active === cat.id ? {
+                  background: "var(--gradient-primary)",
+                  color: "#fff",
+                  boxShadow: "0 2px 12px rgba(124,58,237,0.3)",
+                } : {
+                  background: "var(--surface-card)",
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border-strong)",
+                }}
               >
                 {cat.label}
               </button>
@@ -48,20 +45,17 @@ export default function ProjectsPage() {
           </div>
         </AnimatedSection>
 
-        {/* Project grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bento-grid">
           {filtered.map((project, i) => (
-            <AnimatedSection key={project.id} delay={i * 80}>
-              <ProjectCard project={project} />
+            <AnimatedSection key={project.id} delay={i * 80} className={i === 0 && filtered.length > 2 ? "bento-wide" : i === 1 && filtered.length > 2 ? "bento-narrow" : "bento-half"}>
+              <ProjectCard project={project} size={i === 0 && filtered.length > 2 ? "large" : "default"} />
             </AnimatedSection>
           ))}
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-[var(--text-tertiary)]">
-              No projects in this category yet.
-            </p>
+          <div className="text-center py-24">
+            <p className="text-base" style={{ color: "var(--text-muted)" }}>No projects in this category yet.</p>
           </div>
         )}
       </div>

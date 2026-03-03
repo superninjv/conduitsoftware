@@ -7,7 +7,7 @@ const endpoints = [
   {
     method: "GET",
     path: "/api/v1/projects",
-    description: "List all Conduit Software projects with metadata, status, and links.",
+    desc: "List all projects. Supports ?category= and ?status= filters.",
     response: `{
   "projects": [
     {
@@ -15,137 +15,94 @@ const endpoints = [
       "name": "Paragon Royale",
       "category": "analytics",
       "status": "live",
-      "url": "https://paragonroyale.com",
       "tags": ["Fortnite", "Analytics"]
     }
-  ]
+  ],
+  "total": 7
 }`,
   },
   {
     method: "GET",
-    path: "/api/v1/projects/:id",
-    description: "Get detailed information about a specific project.",
+    path: "/api/v1/projects?id=:id",
+    desc: "Get a single project by ID.",
     response: `{
   "id": "paragon-royale",
   "name": "Paragon Royale",
-  "tagline": "Fortnite analytics & performance tracking",
-  "description": "...",
+  "tagline": "Fortnite analytics",
   "category": "analytics",
-  "status": "live",
-  "url": "https://paragonroyale.com",
-  "tags": ["Fortnite", "Analytics"]
+  "status": "live"
 }`,
   },
   {
     method: "POST",
     path: "/api/v1/bugs",
-    description: "Submit a bug report for any Conduit Software project.",
-    response: `{
-  "success": true,
-  "message": "Bug report received"
-}`,
+    desc: "Submit a bug report. Requires: project, title, description.",
+    response: `{ "success": true, "message": "Bug report received" }`,
   },
   {
     method: "POST",
     path: "/api/v1/contact",
-    description: "Send a contact message to the Conduit Software team.",
-    response: `{
-  "success": true,
-  "message": "Message sent"
-}`,
+    desc: "Send a contact message. Requires: name, email, subject, message.",
+    response: `{ "success": true, "message": "Message sent" }`,
   },
 ];
 
-const methodColors: Record<string, string> = {
-  GET: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  POST: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  PUT: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-  DELETE: "bg-red-500/10 text-red-500 border-red-500/20",
+const methodStyle: Record<string, { bg: string; text: string; border: string }> = {
+  GET: { bg: "rgba(16,185,129,0.08)", text: "#10b981", border: "rgba(16,185,129,0.15)" },
+  POST: { bg: "rgba(99,102,241,0.08)", text: "#818cf8", border: "rgba(99,102,241,0.15)" },
 };
 
 export default function DocsPage() {
   return (
-    <div className="pt-28 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="pt-32 pb-28">
+      <div className="max-w-[800px] mx-auto px-6">
         <AnimatedSection>
-          <h1 className="font-display font-bold text-4xl sm:text-5xl tracking-tight mb-4 text-[var(--text-primary)]">
-            API Documentation
-          </h1>
-          <p className="text-lg text-[var(--text-secondary)] mb-4">
-            Open-source REST API for accessing Conduit Software project data.
-            All endpoints are available at{" "}
-            <code className="font-mono text-conduit-400 bg-conduit-500/10 px-1.5 py-0.5 rounded text-sm">
-              {siteConfig.url}/api/v1
-            </code>
-          </p>
-          <p className="text-sm text-[var(--text-tertiary)] mb-12">
-            No authentication required for public endpoints. Rate limited to 100
-            requests per minute.
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-4 gradient-text">Developers</p>
+          <h1 className="heading-display text-[clamp(2rem,5vw,3rem)] mb-4" style={{ color: "var(--text-primary)" }}>API Documentation</h1>
+          <p className="text-base leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
+            Open REST API for Conduit Software project data. No authentication required for public endpoints.
           </p>
         </AnimatedSection>
 
-        {/* Base URL */}
-        <AnimatedSection delay={100}>
-          <div className="gradient-border p-5 mb-10">
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-mono font-medium text-[var(--text-tertiary)] uppercase">
-                Base URL
-              </span>
-              <code className="font-mono text-sm text-[var(--text-primary)]">
-                {siteConfig.url}/api/v1
-              </code>
-            </div>
+        <AnimatedSection delay={80}>
+          <div className="card p-4 mb-12 flex items-center gap-3">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Base URL</span>
+            <code className="font-mono text-sm font-medium" style={{ color: "var(--text-primary)" }}>{siteConfig.url}/api/v1</code>
           </div>
         </AnimatedSection>
 
-        {/* Endpoints */}
-        <div className="space-y-6">
-          {endpoints.map((ep, i) => (
-            <AnimatedSection key={ep.path + ep.method} delay={150 + i * 80}>
-              <div className="gradient-border overflow-hidden">
-                {/* Header */}
-                <div className="p-5 flex items-start gap-3">
-                  <span
-                    className={`px-2.5 py-1 rounded text-xs font-mono font-bold border ${methodColors[ep.method]}`}
-                  >
-                    {ep.method}
-                  </span>
-                  <div className="flex-1">
-                    <code className="font-mono text-sm text-[var(--text-primary)]">
-                      {ep.path}
-                    </code>
-                    <p className="text-sm text-[var(--text-secondary)] mt-1">
-                      {ep.description}
-                    </p>
+        <div className="space-y-5">
+          {endpoints.map((ep, i) => {
+            const ms = methodStyle[ep.method];
+            return (
+              <AnimatedSection key={ep.path + ep.method} delay={120 + i * 80}>
+                <div className="card overflow-hidden">
+                  <div className="p-5">
+                    <div className="flex items-start gap-3">
+                      <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold shrink-0" style={{ background: ms.bg, color: ms.text, border: `1px solid ${ms.border}` }}>
+                        {ep.method}
+                      </span>
+                      <div>
+                        <code className="font-mono text-sm font-medium" style={{ color: "var(--text-primary)" }}>{ep.path}</code>
+                        <p className="text-[13px] mt-1.5" style={{ color: "var(--text-tertiary)" }}>{ep.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="px-5 py-4" style={{ borderTop: "1px solid var(--border-color)", background: "var(--surface-1)" }}>
+                    <div className="text-[10px] font-mono font-bold uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Response</div>
+                    <pre className="font-mono text-xs leading-relaxed overflow-x-auto" style={{ color: "var(--text-tertiary)" }}>{ep.response}</pre>
                   </div>
                 </div>
-
-                {/* Response */}
-                <div className="border-t border-[var(--border-color)] bg-[var(--surface-secondary)] p-5">
-                  <div className="text-xs font-mono text-[var(--text-tertiary)] mb-2 uppercase">
-                    Response
-                  </div>
-                  <pre className="font-mono text-xs text-[var(--text-secondary)] overflow-x-auto leading-relaxed">
-                    {ep.response}
-                  </pre>
-                </div>
-              </div>
-            </AnimatedSection>
-          ))}
+              </AnimatedSection>
+            );
+          })}
         </div>
 
-        {/* Coming soon */}
-        <AnimatedSection delay={500}>
-          <div className="mt-16 text-center">
-            <h2 className="font-display font-semibold text-xl mb-3 text-[var(--text-primary)]">
-              More endpoints coming soon
-            </h2>
-            <p className="text-[var(--text-secondary)] max-w-lg mx-auto">
-              We&apos;re actively building out the API. Game-specific analytics
-              endpoints, mod metadata, and webhook integrations are all on the
-              roadmap.
-            </p>
-          </div>
+        <AnimatedSection delay={500} className="mt-20 text-center">
+          <h2 className="font-display font-semibold text-lg mb-3" style={{ color: "var(--text-primary)" }}>More coming soon</h2>
+          <p className="text-sm leading-relaxed max-w-md mx-auto" style={{ color: "var(--text-tertiary)" }}>
+            Game-specific analytics endpoints, mod metadata APIs, and webhook integrations are all on the roadmap.
+          </p>
         </AnimatedSection>
       </div>
     </div>
