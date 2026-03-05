@@ -8,9 +8,9 @@ const footerLinks = [
   {
     title: "Products",
     links: [
-      { label: "Paragon Analytics", href: "/analytics" },
-      { label: "Developer Tools", href: "/tools" },
-      { label: "Game Mods", href: "/mods" },
+      { label: "Paragon Analytics", href: "/#analytics" },
+      { label: "Developer Tools", href: "/#tools" },
+      { label: "Game Mods", href: "/#mods" },
     ],
   },
   {

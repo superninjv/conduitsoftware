@@ -120,7 +120,7 @@ export default function BugsPage() {
                   <option value="">Select a project</option>
                   {projects.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.icon} {p.name}
+                      {p.name}
                     </option>
                   ))}
                   <option value="website">🌐 conduitsoftware.org</option>

@@ -10,9 +10,9 @@ export function ConduitLogo({ className = "" }: { className?: string }) {
     >
       <defs>
         <linearGradient id="conduit-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0f4c81" />
-          <stop offset="50%" stopColor="#0891b2" />
-          <stop offset="100%" stopColor="#06b6d4" />
+          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="50%" stopColor="#a78bfa" />
+          <stop offset="100%" stopColor="#6d28d9" />
         </linearGradient>
       </defs>
       <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#conduit-grad)" />

@@ -6,14 +6,14 @@ export const siteConfig = {
   url: "https://conduitsoftware.org",
   email: "contact@conduitsoftware.org",
   socials: {
-    github: "https://github.com/superninjv",
+    github: "https://github.com/conduit-software",
     discord: "",
     twitter: "",
   },
   nav: [
-    { label: "Tools", href: "/tools" },
-    { label: "Analytics", href: "/analytics" },
-    { label: "Mods", href: "/mods" },
+    { label: "Analytics", href: "/#analytics" },
+    { label: "Tools", href: "/#tools" },
+    { label: "Mods", href: "/#mods" },
     { label: "API", href: "/docs" },
     { label: "Bugs", href: "/bugs" },
     { label: "Contact", href: "/contact" },

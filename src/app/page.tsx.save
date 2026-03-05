@@ -14,9 +14,9 @@ const badgeItems = [
 ];
 
 const stats = [
-  { value: "12+", label: "Data Sources Tracked" },
-  { value: "500+", label: "Active Users" },
-  { value: "2.4K", label: "Downloads" },
+  { value: "1000+", label: "Data Sources Tracked" },
+  { value: "1000+", label: "Active Users" },
+  { value: "2.6K", label: "Downloads" },
 ];
 
 function RotatingBadge() {
@@ -226,7 +226,7 @@ export default function HomePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { name: "Paragon Royale", game: "Clash Royale", status: "Live", statusColor: "bg-emerald-500 text-emerald-500", desc: "Match analytics, deck performance, and win-rate trends.", href: "https://paragonroyale.com", external: true },
+              { name: "Paragon Royale", game: "Clash Royale", status: "Live", statusColor: "bg-emerald-500 text-emerald-500", desc: "Complex  analytic, AI coach and deck builder,  and win-rate trends.", href: "https://paragonroyale.com", external: true },
               { name: "Paragon Rivals", game: "Marvel Rivals", status: "In Development", statusColor: "bg-blue-500 text-blue-500", desc: "Hero statistics, match breakdowns, and meta analysis." },
               { name: "Paragon Overwatch", game: "Overwatch 2", status: "Planned", statusColor: "bg-zinc-400 text-zinc-400", desc: "Hero performance tracking, SR trends, and team composition analysis." },
               { name: "Paragon Strike", game: "CS2", status: "Planned", statusColor: "bg-zinc-400 text-zinc-400", desc: "Round-by-round breakdowns, economy tracking, and aim statistics." },
@@ -318,23 +318,13 @@ export default function HomePage() {
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
                   Quality-of-life improvements and new gameplay mechanics for Minecraft. Available on both CurseForge and Modrinth.
                 </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex gap-2">
-                    <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">CurseForge</span>
-                    <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">Modrinth</span>
-                  </div>
-                  <a
-                    href="https://www.curseforge.com/minecraft/mc-mods/nautilusplus"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--accent-mid)] hover:text-[var(--text-primary)] transition-colors"
-                  >
-                    View on CurseForge
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  </a>
+                <div className="flex gap-2">
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">CurseForge</span>
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">Modrinth</span>
                 </div>
               </div>
             </AnimatedSection>
+
             <AnimatedSection delay={80}>
               <div className="card p-6 h-full">
                 <div className="flex items-center justify-between mb-3">
@@ -354,6 +344,7 @@ export default function HomePage() {
               </div>
             </AnimatedSection>
           </div>
+
           <AnimatedSection delay={160}>
             <div className="mt-8">
               <Link href="/mods" className="inline-flex items-center gap-1.5 text-sm font-medium text-conduit-500 hover:text-conduit-400 transition-colors">

@@ -13,6 +13,7 @@ export function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-[var(--border-color)]">
       <nav className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <ConduitLogo className="w-7 h-7 transition-transform group-hover:scale-105" />
           <span className="font-display font-bold text-base tracking-tight text-[var(--text-primary)]">
@@ -20,6 +21,7 @@ export function Navbar() {
           </span>
         </Link>
 
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-0.5">
           {siteConfig.nav.map((item) => (
             <Link
@@ -32,6 +34,7 @@ export function Navbar() {
           ))}
         </div>
 
+        {/* Right side */}
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}

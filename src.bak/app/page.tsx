@@ -1,0 +1,491 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { siteConfig } from "@/config/site";
+import { AnimatedSection } from "@/components/AnimatedSection";
+import { ConduitLogo } from "@/components/ConduitLogo";
+
+/* ── Rotating badge items ─────────────────────────────────── */
+const badgeItems = [
+  { label: "Paragon Analytics Engine", status: "Live", href: "/#analytics" },
+  { label: "Conduit Developer Tools", status: "In Development", href: "/#tools" },
+  { label: "Bug Report Portal", status: "Live", href: "/bugs" },
+  { label: "REST API", status: "Live", href: "/docs" },
+];
+
+/* ── Stats ─────────────────────────────────────────────────── */
+const stats = [
+  { value: "12+", label: "Data Sources Tracked" },
+  { value: "500+", label: "Active Users" },
+  { value: "2.4K", label: "Downloads" },
+];
+
+/* ── Rotating Badge Component ──────────────────────────────── */
+function RotatingBadge() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((i) => (i + 1) % badgeItems.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, []);
+
+  const item = badgeItems[index];
+
+  return (
+    <Link
+      href={item.href}
+      className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--surface-card)] hover:border-[var(--border-hover)] transition-colors duration-200"
+    >
+      <span className="flex items-center gap-1.5">
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${
+            item.status === "Live" ? "bg-emerald-500" : "bg-blue-500"
+          }`}
+        />
+        <span className="text-[11px] font-medium text-[var(--text-tertiary)]">
+          {item.status}
+        </span>
+      </span>
+      <span className="w-px h-3 bg-[var(--border-color)]" />
+      <span
+        key={index}
+        className="text-xs font-medium text-[var(--text-secondary)]"
+        style={{
+          animation: "fadeSlideIn 3.2s ease-in-out",
+        }}
+      >
+        {item.label}
+      </span>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="text-[var(--text-tertiary)]"
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </Link>
+  );
+}
+
+/* ── Main Page ─────────────────────────────────────────────── */
+export default function HomePage() {
+  return (
+    <>
+      {/* ── Hero ────────────────────────────────────────────── */}
+      <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{ background: "var(--gradient-hero)" }}
+        />
+        <div className="absolute inset-0 bg-grid opacity-40" />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
+          <AnimatedSection>
+            <div className="mb-8">
+              <RotatingBadge />
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={80}>
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.1] mb-5">
+              Connecting humans to{" "}
+              <span className="gradient-text">meaningful data</span>
+            </h1>
+          </AnimatedSection>
+
+          <AnimatedSection delay={160}>
+            <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
+              Analytics engines, developer tools, game mods, and open-source
+              APIs. We build the software that turns raw data into real insight.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={240}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/#analytics" className="btn-primary px-6 py-2.5">
+                Explore Products
+                <svg
+                  className="ml-2 w-3.5 h-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </Link>
+              <Link href="/docs" className="btn-secondary px-6 py-2.5">
+                API Docs
+              </Link>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ── Stats ───────────────────────────────────────────── */}
+      <section className="border-y border-[var(--border-color)] bg-[var(--surface-secondary)]">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-3 gap-8">
+            {stats.map((stat, i) => (
+              <AnimatedSection key={stat.label} delay={i * 80}>
+                <div className="text-center">
+                  <div className="font-display font-bold text-2xl sm:text-3xl text-[var(--text-primary)] mb-0.5">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs sm:text-sm text-[var(--text-tertiary)]">
+                    {stat.label}
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Paragon Analytics Engine ────────────────────────── */}
+      <section id="analytics" className="py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto px-6">
+          <AnimatedSection>
+            <span className="section-label mb-4 block">Analytics</span>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-4 text-[var(--text-primary)]">
+              Paragon Analytics Engine
+            </h2>
+            <p className="text-base text-[var(--text-secondary)] max-w-2xl mb-12 leading-relaxed">
+              Real-time performance tracking and competitive insights across
+              multiple game titles. Each Paragon app is purpose-built for its
+              game, surfacing the stats that actually matter.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                name: "Paragon Royale",
+                game: "Fortnite",
+                status: "Live",
+                statusColor: "bg-emerald-500 text-emerald-500",
+                description:
+                  "Match analytics, performance trends, and competitive insights.",
+                href: "https://paragonroyale.com",
+                external: true,
+              },
+              {
+                name: "Paragon Rivals",
+                game: "Marvel Rivals",
+                status: "In Development",
+                statusColor: "bg-blue-500 text-blue-500",
+                description:
+                  "Hero statistics, match breakdowns, and meta analysis.",
+              },
+              {
+                name: "Paragon Overwatch",
+                game: "Overwatch 2",
+                status: "Planned",
+                statusColor: "bg-zinc-400 text-zinc-400",
+                description:
+                  "Hero performance tracking, SR trends, and team composition analysis.",
+              },
+              {
+                name: "Paragon Strike",
+                game: "CS2",
+                status: "Planned",
+                statusColor: "bg-zinc-400 text-zinc-400",
+                description:
+                  "Round-by-round breakdowns, economy tracking, and aim statistics.",
+              },
+            ].map((app, i) => (
+              <AnimatedSection key={app.name} delay={i * 80}>
+                <div className="card p-5 h-full flex flex-col">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-[var(--surface-tertiary)] text-[var(--text-tertiary)]">
+                      {app.game}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${app.statusColor.split(" ")[0]}`}
+                      />
+                      <span
+                        className={`text-[11px] font-medium ${app.statusColor.split(" ")[1]}`}
+                      >
+                        {app.status}
+                      </span>
+                    </div>
+                  </div>
+                  <h3 className="font-display font-bold text-sm text-[var(--text-primary)] mb-1.5">
+                    {app.name}
+                  </h3>
+                  <p className="text-sm text-[var(--text-tertiary)] leading-relaxed flex-1">
+                    {app.description}
+                  </p>
+                  {app.external && app.href && (
+                    <a
+                      href={app.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 pt-3 border-t border-[var(--border-color)] text-xs font-medium text-conduit-400 hover:text-conduit-300 transition-colors inline-flex items-center gap-1"
+                    >
+                      Visit site
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Developer Tools ──────────────────────────────────── */}
+      <section
+        id="tools"
+        className="py-20 sm:py-28 bg-[var(--surface-secondary)]"
+      >
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <AnimatedSection>
+              <span className="section-label mb-4 block">Developer Tools</span>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-4 text-[var(--text-primary)]">
+                Conduit DevTools
+              </h2>
+              <p className="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">
+                A growing suite of developer tools built for internal use and
+                shared with the community. API testing, data transformation,
+                and workflow automation.
+              </p>
+              <div className="space-y-3">
+                {[
+                  {
+                    title: "API Testing",
+                    desc: "Automated endpoint validation and response monitoring",
+                  },
+                  {
+                    title: "Data Pipelines",
+                    desc: "Transform and route data between services",
+                  },
+                  {
+                    title: "Workflow Automation",
+                    desc: "Scriptable tasks and scheduled operations",
+                  },
+                ].map((feature) => (
+                  <div key={feature.title} className="flex items-start gap-3">
+                    <div className="mt-1 w-5 h-5 rounded-md bg-[var(--accent-muted)] flex items-center justify-center shrink-0">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--accent)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-[var(--text-primary)]">
+                        {feature.title}
+                      </div>
+                      <div className="text-sm text-[var(--text-tertiary)]">
+                        {feature.desc}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 mt-8">
+                <Link href="/docs" className="btn-primary px-5 py-2.5">
+                  API Documentation
+                </Link>
+                <a
+                  href={siteConfig.socials.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary px-5 py-2.5"
+                >
+                  GitHub
+                </a>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={120}>
+              <div className="card-elevated p-6 font-mono text-sm overflow-hidden">
+                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[var(--border-color)]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400/60" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/60" />
+                  <span className="ml-2 text-[11px] text-[var(--text-tertiary)] font-sans">
+                    terminal
+                  </span>
+                </div>
+                <div className="space-y-1 text-xs leading-relaxed">
+                  <div>
+                    <span className="text-[var(--text-tertiary)]">$</span>{" "}
+                    <span className="text-conduit-300">curl</span>{" "}
+                    <span className="text-[var(--text-secondary)]">
+                      conduitsoftware.org/api/v1/projects
+                    </span>
+                  </div>
+                  <div className="text-[var(--text-tertiary)] mt-2">
+                    {"{"} <span className="text-emerald-400">&quot;projects&quot;</span>: [
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-4">
+                    {"{"} <span className="text-emerald-400">&quot;id&quot;</span>:{" "}
+                    <span className="text-amber-400">&quot;paragon-royale&quot;</span>,
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-6">
+                    <span className="text-emerald-400">&quot;status&quot;</span>:{" "}
+                    <span className="text-amber-400">&quot;live&quot;</span>,
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-6">
+                    <span className="text-emerald-400">&quot;category&quot;</span>:{" "}
+                    <span className="text-amber-400">&quot;analytics&quot;</span>
+                  </div>
+                  <div className="text-[var(--text-tertiary)] pl-4">
+                    {"}"}, ...
+                  </div>
+                  <div className="text-[var(--text-tertiary)]">
+                    ], <span className="text-emerald-400">&quot;total&quot;</span>:{" "}
+                    <span className="text-amber-400">7</span> {"}"}
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Open Source CTA ───────────────────────────────────── */}
+      <section id="open-source" className="py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto px-6">
+          <AnimatedSection>
+            <div className="card-elevated p-10 sm:p-14 text-center relative overflow-hidden">
+              <div className="glow-orb w-[500px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
+              <div className="relative z-10">
+                <div className="inline-flex p-2.5 rounded-xl bg-[var(--accent-muted)] mb-5">
+                  <ConduitLogo className="w-8 h-8" />
+                </div>
+                <h2 className="font-display font-bold text-2xl sm:text-3xl tracking-tight mb-3 text-[var(--text-primary)]">
+                  Open source at the core
+                </h2>
+                <p className="text-base text-[var(--text-secondary)] max-w-lg mx-auto mb-8 leading-relaxed">
+                  Our APIs and tools are built in the open. Browse the source,
+                  contribute, or build your own integrations.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Link href="/docs" className="btn-primary px-6 py-2.5">
+                    Read the Docs
+                  </Link>
+                  <a
+                    href={siteConfig.socials.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary px-6 py-2.5"
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ── Game Mods ────────────────────────────────────────── */}
+      <section
+        id="mods"
+        className="py-20 sm:py-28 bg-[var(--surface-secondary)]"
+      >
+        <div className="max-w-6xl mx-auto px-6">
+          <AnimatedSection>
+            <span className="section-label mb-4 block">Game Mods</span>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-4 text-[var(--text-primary)]">
+              Mods &amp; modding tools
+            </h2>
+            <p className="text-base text-[var(--text-secondary)] max-w-2xl mb-12 leading-relaxed">
+              Minecraft mods published on CurseForge and Modrinth, plus
+              companion tools for other titles.
+            </p>
+          </AnimatedSection>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <AnimatedSection>
+              <div className="card p-6 h-full">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-display font-bold text-base text-[var(--text-primary)]">
+                    Minecraft Mods
+                  </h3>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="text-[11px] font-medium text-emerald-500">
+                      Live
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Quality-of-life improvements and new gameplay mechanics for
+                  Minecraft. Available on both CurseForge and Modrinth.
+                </p>
+                <div className="flex gap-2">
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    CurseForge
+                  </span>
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    Modrinth
+                  </span>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={80}>
+              <div className="card p-6 h-full">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-display font-bold text-base text-[var(--text-primary)]">
+                    Terraria Tools
+                  </h3>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                    <span className="text-[11px] font-medium text-zinc-400">
+                      Planned
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Companion utilities for Terraria including world analysis
+                  and inventory management tools.
+                </p>
+                <div className="flex gap-2">
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    Terraria
+                  </span>
+                  <span className="px-2 py-0.5 text-[11px] font-mono text-[var(--text-tertiary)] bg-[var(--surface-tertiary)] rounded">
+                    Utilities
+                  </span>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

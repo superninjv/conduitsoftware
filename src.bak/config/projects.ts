@@ -15,13 +15,13 @@ export const projects: Project[] = [
   {
     id: "paragon-royale",
     name: "Paragon Royale",
-    tagline: "Clash Royale analytics & performance tracking",
+    tagline: "Fortnite analytics & performance tracking",
     description:
-      "Advanced match analytics, deck performance, win-rate trends, and competitive insights for Clash Royale players.",
+      "Advanced match analytics, performance trends, and competitive insights for Fortnite players looking to improve their game.",
     category: "analytics",
     status: "live",
     externalUrl: "https://paragonroyale.com",
-    tags: ["Clash Royale", "Analytics", "Tracking"],
+    tags: ["Fortnite", "Analytics", "Tracking"],
     featured: true,
   },
   {
