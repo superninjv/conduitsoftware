@@ -3,6 +3,7 @@
 Main website for Conduit Software — hub for all projects, APIs, and tools.
 
 **Live at:** [conduitsoftware.org](https://conduitsoftware.org)
+**report bugs:** [https://conduitsoftware.org/bugs](https://conduitsoftware.org/bugs)
 
 ---
 
